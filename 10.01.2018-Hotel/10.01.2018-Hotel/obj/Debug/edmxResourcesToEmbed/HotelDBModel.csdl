@@ -1,0 +1,492 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="HotelDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Booking">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="booking_code" Type="Int32" Nullable="false" />
+    <Property Name="check_in_date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="check_out_date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="adult_count" Type="Int32" Nullable="false" />
+    <Property Name="child_count" Type="Int32" />
+    <Property Name="room_type_id" Type="Int32" Nullable="false" />
+    <Property Name="user_id" Type="Int32" Nullable="false" />
+    <Property Name="booking_status" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Room_Types" Relationship="Self.booking_to_room_type" FromRole="Booking" ToRole="Room_Types" />
+    <NavigationProperty Name="User" Relationship="Self.booking_to_user" FromRole="Booking" ToRole="Users" />
+    <NavigationProperty Name="Guests" Relationship="Self.Guest_to_booking" FromRole="Booking" ToRole="Guests" />
+  </EntityType>
+  <EntityType Name="Employer_Types">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="employer_type_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Employers" Relationship="Self.Employers_to_type" FromRole="Employer_Types" ToRole="Employers" />
+  </EntityType>
+  <EntityType Name="Employer">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="employer_full_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="employer_info" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="employer_start_time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="employer_end_time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="employer_salary" Type="Double" Nullable="false" />
+    <Property Name="employer_type_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Employer_Types" Relationship="Self.Employers_to_type" FromRole="Employers" ToRole="Employer_Types" />
+    <NavigationProperty Name="Tasks" Relationship="Self.Task_to_employer" FromRole="Employers" ToRole="Tasks" />
+  </EntityType>
+  <EntityType Name="Expence">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="expence_type_id" Type="Int32" Nullable="false" />
+    <Property Name="expence_description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="expence_amount" Type="Double" Nullable="false" />
+    <Property Name="payment_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Payment" Relationship="Self.Expences_to_payment" FromRole="Expences" ToRole="Payments" />
+    <NavigationProperty Name="Expences_Types" Relationship="Self.Expences_to_type" FromRole="Expences" ToRole="Expences_Types" />
+  </EntityType>
+  <EntityType Name="Expences_Types">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="expences_type_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Expences" Relationship="Self.Expences_to_type" FromRole="Expences_Types" ToRole="Expences" />
+  </EntityType>
+  <EntityType Name="Guest">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="user_id" Type="Int32" Nullable="false" />
+    <Property Name="booking_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Booking" Relationship="Self.Guest_to_booking" FromRole="Guests" ToRole="Booking" />
+    <NavigationProperty Name="Rooms_Guests" Relationship="Self.Guest_to_guest" FromRole="Guests" ToRole="Rooms_Guests" />
+    <NavigationProperty Name="User" Relationship="Self.Guest_to_user" FromRole="Guests" ToRole="Users" />
+    <NavigationProperty Name="Payments" Relationship="Self.Payment_to_guest" FromRole="Guests" ToRole="Payments" />
+  </EntityType>
+  <EntityType Name="Payment_Types">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="payment_type_name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Payments" Relationship="Self.Payments_to_types" FromRole="Payment_Types" ToRole="Payments" />
+  </EntityType>
+  <EntityType Name="Payment">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="payment_amount" Type="Double" Nullable="false" />
+    <Property Name="guest_id" Type="Int32" Nullable="false" />
+    <Property Name="payment_type_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Expences" Relationship="Self.Expences_to_payment" FromRole="Payments" ToRole="Expences" />
+    <NavigationProperty Name="Guest" Relationship="Self.Payment_to_guest" FromRole="Payments" ToRole="Guests" />
+    <NavigationProperty Name="Payment_Types" Relationship="Self.Payments_to_types" FromRole="Payments" ToRole="Payment_Types" />
+  </EntityType>
+  <EntityType Name="Photo">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="image_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="image_src" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Rooms_Photos" Relationship="Self.to_photo" FromRole="Photos" ToRole="Rooms_Photos" />
+  </EntityType>
+  <EntityType Name="Room_Details">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="detail_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Rooms_Details" Relationship="Self.to_detail" FromRole="Room_Details" ToRole="Rooms_Details" />
+  </EntityType>
+  <EntityType Name="Room_Types">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="room_type_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Bookings" Relationship="Self.booking_to_room_type" FromRole="Room_Types" ToRole="Booking" />
+    <NavigationProperty Name="Rooms" Relationship="Self.room_to_type" FromRole="Room_Types" ToRole="Rooms" />
+  </EntityType>
+  <EntityType Name="Room">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="room_number" Type="Int32" Nullable="false" />
+    <Property Name="room_type_id" Type="Int32" Nullable="false" />
+    <Property Name="bed_count" Type="Int32" Nullable="false" />
+    <Property Name="room_price" Type="Int32" Nullable="false" />
+    <Property Name="room_reservation_status" Type="Boolean" Nullable="false" />
+    <Property Name="room_cleaning_status" Type="Boolean" Nullable="false" />
+    <Property Name="room_status" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Room_Types" Relationship="Self.room_to_type" FromRole="Rooms" ToRole="Room_Types" />
+    <NavigationProperty Name="Rooms_Guests" Relationship="Self.Room_to_guest" FromRole="Rooms" ToRole="Rooms_Guests" />
+    <NavigationProperty Name="Rooms_Details" Relationship="Self.to_room" FromRole="Rooms" ToRole="Rooms_Details" />
+    <NavigationProperty Name="Rooms_Photos" Relationship="Self.to_room_01" FromRole="Rooms" ToRole="Rooms_Photos" />
+  </EntityType>
+  <EntityType Name="Rooms_Details">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="room_id" Type="Int32" />
+    <Property Name="detail_id" Type="Int32" />
+    <NavigationProperty Name="Room_Details" Relationship="Self.to_detail" FromRole="Rooms_Details" ToRole="Room_Details" />
+    <NavigationProperty Name="Room" Relationship="Self.to_room" FromRole="Rooms_Details" ToRole="Rooms" />
+  </EntityType>
+  <EntityType Name="Rooms_Guests">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="room_id" Type="Int32" Nullable="false" />
+    <Property Name="guest_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Guest" Relationship="Self.Guest_to_guest" FromRole="Rooms_Guests" ToRole="Guests" />
+    <NavigationProperty Name="Room" Relationship="Self.Room_to_guest" FromRole="Rooms_Guests" ToRole="Rooms" />
+  </EntityType>
+  <EntityType Name="Rooms_Photos">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="room_id" Type="Int32" />
+    <Property Name="photo_id" Type="Int32" />
+    <NavigationProperty Name="Photo" Relationship="Self.to_photo" FromRole="Rooms_Photos" ToRole="Photos" />
+    <NavigationProperty Name="Room" Relationship="Self.to_room_01" FromRole="Rooms_Photos" ToRole="Rooms" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Task">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="employer_id" Type="Int32" Nullable="false" />
+    <Property Name="task_description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="task_start_time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="task_end_time" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="task_status" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Employer" Relationship="Self.Task_to_employer" FromRole="Tasks" ToRole="Employers" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="user_full_name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="user_email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="user_phone" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Bookings" Relationship="Self.booking_to_user" FromRole="Users" ToRole="Booking" />
+    <NavigationProperty Name="Guests" Relationship="Self.Guest_to_user" FromRole="Users" ToRole="Guests" />
+  </EntityType>
+  <Association Name="booking_to_room_type">
+    <End Role="Room_Types" Type="Self.Room_Types" Multiplicity="1" />
+    <End Role="Booking" Type="Self.Booking" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Room_Types">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Booking">
+        <PropertyRef Name="room_type_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="booking_to_user">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="Booking" Type="Self.Booking" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Booking">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Guest_to_booking">
+    <End Role="Booking" Type="Self.Booking" Multiplicity="1" />
+    <End Role="Guests" Type="Self.Guest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Booking">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Guests">
+        <PropertyRef Name="booking_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Employers_to_type">
+    <End Role="Employer_Types" Type="Self.Employer_Types" Multiplicity="1" />
+    <End Role="Employers" Type="Self.Employer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employer_Types">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Employers">
+        <PropertyRef Name="employer_type_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Task_to_employer">
+    <End Role="Employers" Type="Self.Employer" Multiplicity="1" />
+    <End Role="Tasks" Type="Self.Task" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employers">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Tasks">
+        <PropertyRef Name="employer_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Expences_to_payment">
+    <End Role="Payments" Type="Self.Payment" Multiplicity="1" />
+    <End Role="Expences" Type="Self.Expence" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Payments">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Expences">
+        <PropertyRef Name="payment_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Expences_to_type">
+    <End Role="Expences_Types" Type="Self.Expences_Types" Multiplicity="1" />
+    <End Role="Expences" Type="Self.Expence" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Expences_Types">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Expences">
+        <PropertyRef Name="expence_type_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Guest_to_guest">
+    <End Role="Guests" Type="Self.Guest" Multiplicity="1" />
+    <End Role="Rooms_Guests" Type="Self.Rooms_Guests" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Guests">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Rooms_Guests">
+        <PropertyRef Name="guest_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Guest_to_user">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="Guests" Type="Self.Guest" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Guests">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Payment_to_guest">
+    <End Role="Guests" Type="Self.Guest" Multiplicity="1" />
+    <End Role="Payments" Type="Self.Payment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Guests">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Payments">
+        <PropertyRef Name="guest_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Payments_to_types">
+    <End Role="Payment_Types" Type="Self.Payment_Types" Multiplicity="1" />
+    <End Role="Payments" Type="Self.Payment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Payment_Types">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Payments">
+        <PropertyRef Name="payment_type_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="to_photo">
+    <End Role="Photos" Type="Self.Photo" Multiplicity="0..1" />
+    <End Role="Rooms_Photos" Type="Self.Rooms_Photos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Photos">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Rooms_Photos">
+        <PropertyRef Name="photo_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="to_detail">
+    <End Role="Room_Details" Type="Self.Room_Details" Multiplicity="0..1" />
+    <End Role="Rooms_Details" Type="Self.Rooms_Details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Room_Details">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Rooms_Details">
+        <PropertyRef Name="detail_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="room_to_type">
+    <End Role="Room_Types" Type="Self.Room_Types" Multiplicity="1" />
+    <End Role="Rooms" Type="Self.Room" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Room_Types">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Rooms">
+        <PropertyRef Name="room_type_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Room_to_guest">
+    <End Role="Rooms" Type="Self.Room" Multiplicity="1" />
+    <End Role="Rooms_Guests" Type="Self.Rooms_Guests" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Rooms">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Rooms_Guests">
+        <PropertyRef Name="room_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="to_room">
+    <End Role="Rooms" Type="Self.Room" Multiplicity="0..1" />
+    <End Role="Rooms_Details" Type="Self.Rooms_Details" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Rooms">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Rooms_Details">
+        <PropertyRef Name="room_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="to_room_01">
+    <End Role="Rooms" Type="Self.Room" Multiplicity="0..1" />
+    <End Role="Rooms_Photos" Type="Self.Rooms_Photos" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Rooms">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Rooms_Photos">
+        <PropertyRef Name="room_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="HotelDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Bookings" EntityType="Self.Booking" />
+    <EntitySet Name="Employer_Types" EntityType="Self.Employer_Types" />
+    <EntitySet Name="Employers" EntityType="Self.Employer" />
+    <EntitySet Name="Expences" EntityType="Self.Expence" />
+    <EntitySet Name="Expences_Types" EntityType="Self.Expences_Types" />
+    <EntitySet Name="Guests" EntityType="Self.Guest" />
+    <EntitySet Name="Payment_Types" EntityType="Self.Payment_Types" />
+    <EntitySet Name="Payments" EntityType="Self.Payment" />
+    <EntitySet Name="Photos" EntityType="Self.Photo" />
+    <EntitySet Name="Room_Details" EntityType="Self.Room_Details" />
+    <EntitySet Name="Room_Types" EntityType="Self.Room_Types" />
+    <EntitySet Name="Rooms" EntityType="Self.Room" />
+    <EntitySet Name="Rooms_Details" EntityType="Self.Rooms_Details" />
+    <EntitySet Name="Rooms_Guests" EntityType="Self.Rooms_Guests" />
+    <EntitySet Name="Rooms_Photos" EntityType="Self.Rooms_Photos" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="Tasks" EntityType="Self.Task" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <AssociationSet Name="booking_to_room_type" Association="Self.booking_to_room_type">
+      <End Role="Room_Types" EntitySet="Room_Types" />
+      <End Role="Booking" EntitySet="Bookings" />
+    </AssociationSet>
+    <AssociationSet Name="booking_to_user" Association="Self.booking_to_user">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Booking" EntitySet="Bookings" />
+    </AssociationSet>
+    <AssociationSet Name="Guest_to_booking" Association="Self.Guest_to_booking">
+      <End Role="Booking" EntitySet="Bookings" />
+      <End Role="Guests" EntitySet="Guests" />
+    </AssociationSet>
+    <AssociationSet Name="Employers_to_type" Association="Self.Employers_to_type">
+      <End Role="Employer_Types" EntitySet="Employer_Types" />
+      <End Role="Employers" EntitySet="Employers" />
+    </AssociationSet>
+    <AssociationSet Name="Task_to_employer" Association="Self.Task_to_employer">
+      <End Role="Employers" EntitySet="Employers" />
+      <End Role="Tasks" EntitySet="Tasks" />
+    </AssociationSet>
+    <AssociationSet Name="Expences_to_payment" Association="Self.Expences_to_payment">
+      <End Role="Payments" EntitySet="Payments" />
+      <End Role="Expences" EntitySet="Expences" />
+    </AssociationSet>
+    <AssociationSet Name="Expences_to_type" Association="Self.Expences_to_type">
+      <End Role="Expences_Types" EntitySet="Expences_Types" />
+      <End Role="Expences" EntitySet="Expences" />
+    </AssociationSet>
+    <AssociationSet Name="Guest_to_guest" Association="Self.Guest_to_guest">
+      <End Role="Guests" EntitySet="Guests" />
+      <End Role="Rooms_Guests" EntitySet="Rooms_Guests" />
+    </AssociationSet>
+    <AssociationSet Name="Guest_to_user" Association="Self.Guest_to_user">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Guests" EntitySet="Guests" />
+    </AssociationSet>
+    <AssociationSet Name="Payment_to_guest" Association="Self.Payment_to_guest">
+      <End Role="Guests" EntitySet="Guests" />
+      <End Role="Payments" EntitySet="Payments" />
+    </AssociationSet>
+    <AssociationSet Name="Payments_to_types" Association="Self.Payments_to_types">
+      <End Role="Payment_Types" EntitySet="Payment_Types" />
+      <End Role="Payments" EntitySet="Payments" />
+    </AssociationSet>
+    <AssociationSet Name="to_photo" Association="Self.to_photo">
+      <End Role="Photos" EntitySet="Photos" />
+      <End Role="Rooms_Photos" EntitySet="Rooms_Photos" />
+    </AssociationSet>
+    <AssociationSet Name="to_detail" Association="Self.to_detail">
+      <End Role="Room_Details" EntitySet="Room_Details" />
+      <End Role="Rooms_Details" EntitySet="Rooms_Details" />
+    </AssociationSet>
+    <AssociationSet Name="room_to_type" Association="Self.room_to_type">
+      <End Role="Room_Types" EntitySet="Room_Types" />
+      <End Role="Rooms" EntitySet="Rooms" />
+    </AssociationSet>
+    <AssociationSet Name="Room_to_guest" Association="Self.Room_to_guest">
+      <End Role="Rooms" EntitySet="Rooms" />
+      <End Role="Rooms_Guests" EntitySet="Rooms_Guests" />
+    </AssociationSet>
+    <AssociationSet Name="to_room" Association="Self.to_room">
+      <End Role="Rooms" EntitySet="Rooms" />
+      <End Role="Rooms_Details" EntitySet="Rooms_Details" />
+    </AssociationSet>
+    <AssociationSet Name="to_room_01" Association="Self.to_room_01">
+      <End Role="Rooms" EntitySet="Rooms" />
+      <End Role="Rooms_Photos" EntitySet="Rooms_Photos" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
